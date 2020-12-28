@@ -133,9 +133,9 @@ class BHPSOGWO():
                     + ( np.random.uniform(size=[self.num_dim])*self.X_alpha - np.random.uniform(size=[self.num_dim])*self.X[i, :] )
                 self.X[i, :] = ( self.sigmoid(new_G)>=0.5 )*1.0
 
-            print('iter:', self._iter, ', score:', self.score_alpha)
-            print(self.X_alpha)
-            print('---')
+            # print('iter:', self._iter, ', score:', self.score_alpha)
+            # print(self.X_alpha)
+            # print('---')
             
             self._iter = self._iter + 1
             self.gBest_curve[self._iter-1] = self.score_alpha.copy()
@@ -149,7 +149,10 @@ class BHPSOGWO():
         plt.show()
     
     def sigmoid(self, x):
-        return 1/(1+np.exp(-10*(x-0.5))) # (15)
+        if len(np.where(-10*(x-0.5)>=700)[0])!=0:
+            return 0
+        else:
+            return 1/(1+np.exp(-10*(x-0.5))) # (15)
     
     def chaotic(self):
         init_X = np.random.uniform(low=0.0, high=1.0, size=[1, self.num_dim])
