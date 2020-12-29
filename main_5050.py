@@ -19,17 +19,20 @@ import time
 num_neig = 1
 g = 100
 p = 10
-times = 20
+times = 1
 w1 = 0.99
 w2 = 0.01
 np.random.seed(42)
 
 
 Xtr_all, ytr_all, Xts_all, yts_all = None, None, None, None
-name_list = ['BreastCancer', 'BreastEW', 'Congress', 'Exactly', 'Exactly2', 
-              'HeartEW', 'Ionosphere', 'KrVsKpEW', 'Lymphography', 'M-of-n',
-              'PenglungEW', 'Sonar', 'SpectEW', 'Tic-tac-toe', 'Vote', 
-              'WaveformEW', 'Wine', 'Zoo']
+# name_list = ['BreastCancer', 'BreastEW', 'Congress', 'Exactly', 'Exactly2', 
+#               'HeartEW', 'Ionosphere', 'KrVsKpEW', 'Lymphography', 'M-of-n',
+#               'PenglungEW', 'Sonar', 'SpectEW', 'Tic-tac-toe', 'Vote', 
+#               'WaveformEW', 'Wine', 'Zoo']
+name_list = ['BreastCancer', 'BreastEW', 'Congress', 
+              'HeartEW', 'Ionosphere', 'Lymphography',
+              'PenglungEW', 'Sonar', 'SpectEW', 'Vote', 'Wine', 'Zoo']
 Xtr_all = []
 ytr_all = []
 Xts_all = []
@@ -78,18 +81,18 @@ for k in range(times):
         knn = KNeighborsClassifier(n_neighbors=num_neig)
         knn.fit(Xtr_all[i][:, optimizer.X_alpha.astype(bool)], ytr_all[i])
         
-        acc = np.round(accuracy_score(knn.predict(Xts_all[i][:, optimizer.X_alpha.astype(bool)]), yts_all[i]), 2)
+        acc = accuracy_score(knn.predict(Xts_all[i][:, optimizer.X_alpha.astype(bool)]), yts_all[i])
         selected = np.sum(optimizer.X_alpha)
-        loss = w1*acc + w2*selected/len(optimizer.X_alpha)
+        loss = w1*(1-acc) + w2*selected/len(optimizer.X_alpha)
         
         table[0, i] += selected # for mean selected
         table[1, i] += acc # for mean acc
         table[2, i] += loss # for mean loss
-        table[6, i] += round(time.time()-start, 2) # for mean time
+        table[6, i] += time.time()-start # for mean time
         
         tmep_for_std[k, i] = loss
         tmep_for_loss[:, i] += optimizer.gBest_curve
-    
+        print(i)
     print('time:'+str(k))
 
 table[0, :] = table[0, :] / times
@@ -99,9 +102,12 @@ table[3, :] = tmep_for_std.min()
 table[4, :] = tmep_for_std.max()
 table[5, :] = np.std(tmep_for_std, axis=0)
 table[6, :] = table[6, :] / times
-tmep_for_loss /= times
-
 table = pd.DataFrame(table)
 table = np.round(table, 2)
 table.columns=name_list
 table.index = ['mean feature selected', 'mean accuracy', 'mean fitness', 'best fitness', 'worst fitness', 'std fitness', 'time']
+
+tmep_for_loss /= times
+tmep_for_loss = pd.DataFrame(tmep_for_loss)
+tmep_for_loss = np.round(tmep_for_loss, 2)
+tmep_for_loss.columns=name_list

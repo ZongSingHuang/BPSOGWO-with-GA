@@ -132,7 +132,10 @@ class BHPSOGWO():
                 new_G = np.random.normal(loc=np.abs(self.X_alpha), scale=np.abs(self.X_alpha - self.X[i, :]))\
                     + ( np.random.uniform(size=[self.num_dim])*self.X_alpha - np.random.uniform(size=[self.num_dim])*self.X[i, :] )
                 self.X[i, :] = ( self.sigmoid(new_G)>=0.5 )*1.0
-
+                
+                # OBL
+                self.OBL()
+                
             # print('iter:', self._iter, ', score:', self.score_alpha)
             # print(self.X_alpha)
             # print('---')
@@ -149,10 +152,17 @@ class BHPSOGWO():
         plt.show()
     
     def sigmoid(self, x):
-        if len(np.where(-10*(x-0.5)>=700)[0])!=0:
-            return 0
-        else:
-            return 1/(1+np.exp(-10*(x-0.5))) # (15)
+        if len(np.where(x>4.1)[0])>0: # 超過4.1就恆1
+            flag = np.where(x>4.1)[0]
+            x[flag] = 4.1+np.random.uniform()*(4.1-x[flag])/x[flag]*4.1
+        if len(np.where(x<-70.4)[0])>0: # 小於-70.4就溢位
+            flag = np.where(x<-70.4)[0]
+            x[flag] = -70.4+np.random.uniform()*np.abs((-70.4-x[flag])/x[flag]*(-70.4))
+        if len(np.where(x>4.1)[0])>0:
+            print('too big!!!')
+        if len(np.where(x<-70.4)[0])>0:
+            print('too small!!!')
+        return 1/(1+np.exp(-10*(x-0.5))) # (15)
     
     def chaotic(self):
         init_X = np.random.uniform(low=0.0, high=1.0, size=[1, self.num_dim])
@@ -163,3 +173,21 @@ class BHPSOGWO():
             smaller = init_X<0.7
             init_X[bigger] = (10/3)*(1-init_X[bigger])
             init_X[smaller] = init_X[smaller]/0.7
+    
+    def OBL(self):
+        k = np.random.uniform()
+        alpha = np.zeros(self.num_dim)
+        beta = np.ones(self.num_dim)
+        new_X = k*(alpha+beta) - self.X
+        
+        idx_too_low = new_X < alpha
+        idx_too_high = new_X > beta
+        rand_X = np.random.uniform(low=alpha, high=beta, size=[self.num_particle, self.num_dim])
+        new_X[idx_too_high] = rand_X[idx_too_high].copy()
+        new_X[idx_too_low] = rand_X[idx_too_low].copy()
+        
+        new_X = ( self.sigmoid(new_X)>=0.5 )*1.0
+        self.X = np.concatenate((new_X, self.X), axis=0)
+        score = self.fit_func(self.X)
+        top_k = score.argsort()[:self.num_particle]
+        self.X = self.X[top_k].copy()
