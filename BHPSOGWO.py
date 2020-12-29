@@ -136,6 +136,35 @@ class BHPSOGWO():
                 # # OBL
                 # self.OBL()
                 
+            # mutation
+            self.Mp = 0.5
+            fitness = self.score_alpha.copy()
+            Xmutated1 = self.X_alpha.copy()
+            for i in range(len(self.X_alpha)):
+                r = np.random.uniform()
+                
+                if r<self.Mp and self.X_alpha[i]==1:
+                    Xmutated1[i] = 0
+                    fitness_mutated = self.fit_func(Xmutated1)
+                    if fitness_mutated<fitness:
+                        fitness = fitness_mutated.copy()
+                        self.X_alpha = Xmutated1.copy()
+                        
+            fitness = self.score_alpha.copy()
+            Xmutated2 = self.X_alpha.copy()
+            for i in range(len(self.X_alpha)):
+                r = np.random.uniform()
+                
+                if r<self.Mp and self.X_alpha[i]==0:
+                    Xmutated2[i] = 1
+                    fitness_mutated = self.fit_func(Xmutated2)
+                    if fitness_mutated<fitness:
+                        fitness = fitness_mutated.copy()
+                        self.X_alpha = Xmutated2.copy()
+                        
+            # update X_alpha
+            self.score_alpha = self.fit_func(self.X_alpha)
+                
             # print('iter:', self._iter, ', score:', self.score_alpha)
             # print(self.X_alpha)
             # print('---')

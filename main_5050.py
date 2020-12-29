@@ -16,10 +16,10 @@ import time
 
 
 
-num_neig = 5
+num_neig = 1
 g = 100
 p = 10
-times = 20
+times = 10
 w1 = 0.99
 w2 = 0.01
 np.random.seed(42)
@@ -32,7 +32,8 @@ Xtr_all, ytr_all, Xts_all, yts_all = None, None, None, None
 #               'WaveformEW', 'Wine', 'Zoo']
 name_list = ['BreastCancer', 'BreastEW', 'Congress', 
               'HeartEW', 'Ionosphere', 'Lymphography',
-              'PenglungEW', 'Sonar', 'SpectEW', 'Vote', 'Wine', 'Zoo']
+              'PenglungEW', 'Sonar', 'SpectEW', 'Vote', 
+              'Wine', 'Zoo']
 Xtr_all = []
 ytr_all = []
 Xts_all = []
