@@ -32,10 +32,10 @@ class BHPSOGWO():
         self.C2 = 0.5
         self.C3 = 0.5
         
-        # self.X = (np.random.uniform(size=[self.num_particle, self.num_dim]) > 0.5)*1.0
+        self.X = (np.random.uniform(size=[self.num_particle, self.num_dim]) > 0.5)*1.0
         
-        self.chaotic()
-        self.X = (self.X > 0.5)*1.0
+        # self.chaotic()
+        # self.X = (self.X > 0.5)*1.0
         
         self.gBest_curve = np.zeros(self.max_iter)
         
@@ -133,8 +133,8 @@ class BHPSOGWO():
                     + ( np.random.uniform(size=[self.num_dim])*self.X_alpha - np.random.uniform(size=[self.num_dim])*self.X[i, :] )
                 self.X[i, :] = ( self.sigmoid(new_G)>=0.5 )*1.0
                 
-                # OBL
-                self.OBL()
+                # # OBL
+                # self.OBL()
                 
             # print('iter:', self._iter, ', score:', self.score_alpha)
             # print(self.X_alpha)
@@ -152,14 +152,9 @@ class BHPSOGWO():
         plt.show()
     
     def sigmoid(self, x):
-        if len(np.where(x>4.1)[0])>0: # 超過4.1就恆1
-            flag = np.where(x>4.1)[0]
-            x[flag] = 4.1+np.random.uniform()*(4.1-x[flag])/x[flag]*4.1
         if len(np.where(x<-70.4)[0])>0: # 小於-70.4就溢位
             flag = np.where(x<-70.4)[0]
             x[flag] = -70.4+np.random.uniform()*np.abs((-70.4-x[flag])/x[flag]*(-70.4))
-        if len(np.where(x>4.1)[0])>0:
-            print('too big!!!')
         if len(np.where(x<-70.4)[0])>0:
             print('too small!!!')
         return 1/(1+np.exp(-10*(x-0.5))) # (15)

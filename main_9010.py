@@ -15,19 +15,21 @@ import functools
 import time
 
 num_neig = 5
-g = 50
+g = 100
 p = 10
-times = 5
+times = 20
 w1 = 0.99
 w2 = 0.01
 skf = StratifiedKFold(n_splits=10, shuffle=True)
 np.random.seed(42)
 
-
-name_list = ['BreastCancer', 'BreastEW', 'Congress', 'Exactly', 'Exactly2', 
-              'HeartEW', 'Ionosphere', 'KrVsKpEW', 'Lymphography', 'M-of-n',
-              'PenglungEW', 'Sonar', 'SpectEW', 'Tic-tac-toe', 'Vote', 
-              'WaveformEW', 'Wine', 'Zoo']
+# name_list = ['BreastCancer', 'BreastEW', 'Congress', 'Exactly', 'Exactly2', 
+#               'HeartEW', 'Ionosphere', 'KrVsKpEW', 'Lymphography', 'M-of-n',
+#               'PenglungEW', 'Sonar', 'SpectEW', 'Tic-tac-toe', 'Vote', 
+#               'WaveformEW', 'Wine', 'Zoo']
+name_list = ['BreastCancer', 'BreastEW', 'Congress', 
+              'HeartEW', 'Ionosphere', 'Lymphography',
+              'PenglungEW', 'Sonar', 'SpectEW', 'Vote', 'Wine', 'Zoo']
 X_all = []
 y_all = []
 table = np.zeros((7, len(name_list)))

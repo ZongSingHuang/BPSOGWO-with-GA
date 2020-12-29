@@ -16,10 +16,10 @@ import time
 
 
 
-num_neig = 1
+num_neig = 5
 g = 100
 p = 10
-times = 1
+times = 20
 w1 = 0.99
 w2 = 0.01
 np.random.seed(42)
