@@ -14,8 +14,9 @@ from sklearn.model_selection import cross_val_score
 import functools
 import time
 
+# 5比較好
 num_neig = 5
-g = 100
+g = 70
 p = 10
 times = 20
 w1 = 0.99
@@ -27,9 +28,10 @@ np.random.seed(42)
 #               'HeartEW', 'Ionosphere', 'KrVsKpEW', 'Lymphography', 'M-of-n',
 #               'PenglungEW', 'Sonar', 'SpectEW', 'Tic-tac-toe', 'Vote', 
 #               'WaveformEW', 'Wine', 'Zoo']
-name_list = ['BreastCancer', 'BreastEW', 'Congress', 
-              'HeartEW', 'Ionosphere', 'Lymphography',
-              'PenglungEW', 'Sonar', 'SpectEW', 'Vote', 'Wine', 'Zoo']
+name_list = ['BreastCancer', 'BreastEW', 'Congress', 'Exactly', 'Exactly2', 
+              'HeartEW', 'Ionosphere', 'Lymphography', 'M-of-n',
+              'PenglungEW', 'Sonar', 'SpectEW', 'Tic-tac-toe', 'Vote', 
+              'Wine', 'Zoo']
 X_all = []
 y_all = []
 table = np.zeros((7, len(name_list)))
@@ -40,7 +42,7 @@ tmep_for_loss = np.zeros((g, len(name_list)))
 
 # 讀資料
 for idx, name in enumerate(name_list):
-    data = pd.read_csv(name+'.csv', header=None).values
+    data = pd.read_csv('./18_data/'+name+'.csv', header=None).values
     X, y = data[:, :-1], data[:, -1]
     
     X_all.append(X)

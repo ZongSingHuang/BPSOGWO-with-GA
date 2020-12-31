@@ -15,11 +15,11 @@ import functools
 import time
 
 
-
-num_neig = 1
-g = 100
+#1 比較好
+num_neig = 5
+g = 70
 p = 10
-times = 10
+times = 20
 w1 = 0.99
 w2 = 0.01
 np.random.seed(42)
@@ -30,9 +30,9 @@ Xtr_all, ytr_all, Xts_all, yts_all = None, None, None, None
 #               'HeartEW', 'Ionosphere', 'KrVsKpEW', 'Lymphography', 'M-of-n',
 #               'PenglungEW', 'Sonar', 'SpectEW', 'Tic-tac-toe', 'Vote', 
 #               'WaveformEW', 'Wine', 'Zoo']
-name_list = ['BreastCancer', 'BreastEW', 'Congress', 
-              'HeartEW', 'Ionosphere', 'Lymphography',
-              'PenglungEW', 'Sonar', 'SpectEW', 'Vote', 
+name_list = ['BreastCancer', 'BreastEW', 'Congress', 'Exactly', 'Exactly2', 
+              'HeartEW', 'Ionosphere', 'Lymphography', 'M-of-n',
+              'PenglungEW', 'Sonar', 'SpectEW', 'Tic-tac-toe', 'Vote', 
               'Wine', 'Zoo']
 Xtr_all = []
 ytr_all = []
@@ -47,7 +47,7 @@ tmep_for_loss = np.zeros((g, len(name_list)))
 
 # 讀資料
 for idx, name in enumerate(name_list):
-    data = pd.read_csv(name+'.csv', header=None).values
+    data = pd.read_csv('./18_data/'+name+'.csv', header=None).values
     X_train, X_test, y_train, y_test = train_test_split(data[:, :-1], data[:, -1], test_size=0.5)
     
     Xtr_all.append(X_train)
