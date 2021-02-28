@@ -27,6 +27,7 @@ class BHPSOGWO():
         self.X_alpha = np.zeros(self.num_dim)
         self.X_beta = np.zeros(self.num_dim)
         self.X_delta = np.zeros(self.num_dim)
+        self.gBest_X = np.zeros(self.num_dim)
         
         self.C1 = 0.5
         self.C2 = 0.5
@@ -38,6 +39,7 @@ class BHPSOGWO():
         # self.X = (self.X > 0.5)*1.0
         
         self.gBest_curve = np.zeros(self.max_iter)
+        self.gBest_score = np.inf
         
         self.V = 0.3 * np.random.normal(size=[self.num_particle, self.num_dim])
         
@@ -54,20 +56,20 @@ class BHPSOGWO():
                 score = self.fit_func(self.X[i, :])
                 
                 if score<self.score_alpha:
-                    # ---EvoloPy ver.---
-                    self.score_delta = self.score_beta
-                    self.X_delta = self.X_beta.copy()
-                    self.score_beta = self.score_alpha
-                    self.X_beta = self.X_alpha.copy()
-                    # ------------------
+                    # # ---EvoloPy ver.---
+                    # self.score_delta = self.score_beta
+                    # self.X_delta = self.X_beta.copy()
+                    # self.score_beta = self.score_alpha
+                    # self.X_beta = self.X_alpha.copy()
+                    # # ------------------
                     self.score_alpha = score.copy()
                     self.X_alpha = self.X[i, :].copy()
             
                 if score>self.score_alpha and score<self.score_beta:
-                    # ---EvoloPy ver.---
-                    self.score_delta = self.score_beta
-                    self.X_delta = self.X_beta.copy()
-                    # ------------------
+                    # # ---EvoloPy ver.---
+                    # self.score_delta = self.score_beta
+                    # self.X_delta = self.X_beta.copy()
+                    # # ------------------
                     self.score_beta = score.copy()
                     self.X_beta = self.X[i, :].copy()
             
@@ -140,6 +142,8 @@ class BHPSOGWO():
             # print(self.X_alpha)
             # print('---')
             
+            self.gBest_X = self.X_alpha.copy()
+            self.gBest_score = self.score_alpha.copy()
             self._iter = self._iter + 1
             self.gBest_curve[self._iter-1] = self.score_alpha.copy()
         
